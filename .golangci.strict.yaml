@@ -1,0 +1,119 @@
+run:
+  deadline: 10m
+  issues-exit-code: 1
+  tests: false
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - funlen
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - revive
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    #- rowserrcheck # rowserrcheck is disabled because of generics. https://github.com/golangci/golangci-lint/issues/2649
+    - exportloopref
+    - staticcheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - gocognit
+    - nolintlint
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters-settings:
+  errcheck:
+    # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
+    check-type-assertions: true
+
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
+    check-blank: false
+  govet:
+    # report about shadowed variables
+    check-shadowing: true
+
+    # Obtain type information from installed (to $GOPATH/pkg) package files:
+    # golangci-lint will execute `go install -i` and `go test -i` for analyzed packages
+    # before analyzing them.
+    use-installed-packages: false
+  funlen:
+    lines: 110
+    statements: 60
+  goimports:
+    local: "github.com/Stoakes/authz-checker"
+  revive:
+    min-confidence: 0.8
+  gofmt:
+    simplify: true
+  gocyclo:
+    min-complexity: 20
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 150
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  misspell:
+    locale: US
+  lll:
+    line-length: 140
+    tab-width: 1
+  unused:
+    # treat code as a program (not a library) and report unused exported identifiers; default is false.
+    check-exported: true
+  unparam:
+    # call graph construction algorithm (cha, rta). In general, use cha for libraries,
+    # and rta for programs with main packages. Default is cha.
+    algo: cha
+
+    # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
+    check-exported: false
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+    max-func-lines: 30
+  prealloc:
+    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # True by default.
+    simple: true
+    range-loops: true # Report preallocation suggestions on range loops, true by default
+    for-loops: false # Report preallocation suggestions on for loops, false by default
+  gocritic:
+    enabled-tags:
+      - performance
+      - diagnostic
+    disabled-checks:
+      - wrapperFunc
+      - rangeValCopy
+      - hugeParam
+      - assignOp
+      - commentFormatting
+      - ifElseChain
+  nolintlint:
+    require-explanation: true
+    require-specific: true
+
+issues:
+  max-per-linter: 0
+  max-same: 0
+  new: false
+  exclude-use-default: false
